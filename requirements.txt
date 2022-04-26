@@ -1,0 +1,6 @@
+django~=3.2.13
+djangorestframework~=3.13.1
+environs~=9.5.0
+graphene-django~=2.15.0
+psycopg2-binary~=2.9.3
+graphene-subscriptions~=1.0.2
