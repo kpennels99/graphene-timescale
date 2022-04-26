@@ -3,13 +3,44 @@ version: '3'
 services:
   timescale:
     image: timescale/timescaledb:2.6.0-pg14
+    labels:
+      - service_name=timescale
     volumes:
       - 'timescale_data:/var/lib/postgresql/data'
+      - ./all.csv:/opt/graphene_timescale/all.csv
+      - ./vaccinations.csv:/opt/graphene_timescale/vaccinations.csv
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
     ports:
       - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+  
+  django-webserver:
+    build:
+      context: ./
+    labels:
+      - service_name=django
+    environment:
+      - SECRET_KEY=${DJANGO__SECRET_KEY}
+      - DATABASE_ENGINE=${DJANGO__DATABASE_ENGINE}
+      - DATABASE_NAME=${DJANGO__DATABASE_NAME}
+      - DATABASE_USER=${DJANGO__DATABASE_USER}
+      - DATABASE_PASSWORD=${DJANGO__DATABASE_PASSWORD}
+      - DATABASE_HOST=${DJANGO__DATABASE_HOST}
+      - DATABASE_PORT=${DJANGO__DATABASE_PORT}
+      - DEBUG=${DJANGO__DEBUG}
+    volumes:
+      - ./src:/opt/graphene_timescale/src
+    ports:
+      - '8000:8000'
+    depends_on:
+      timescale:
+        condition: service_healthy
 volumes:
   timescale_data:
     driver: local
