@@ -1,9 +1,9 @@
-from operator import mod
 from django.db import models
 
 
 class Region(models.Model):
     
+    name = models.CharField(max_length=100)
     alpha_2 = models.CharField(max_length=2)
     alpha_3 = models.CharField(max_length=3)
     country_code = models.IntegerField()
@@ -20,6 +20,7 @@ class GithubVaxData(models.Model):
     
     date = models.DateField(primary_key=True)
     location = models.CharField(max_length=50)
+    iso_code =  models.CharField(max_length=10)
     total_vaccinations = models.FloatField(null=True)
     people_vaccinated = models.FloatField(null=True)
     people_fully_vaccinated = models.FloatField(null=True)
