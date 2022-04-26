@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     # third party apps
     'rest_framework',
     'channels',
-    "graphql_ws.django",
     'graphene_django',
     'graphene_subscriptions',
     
@@ -101,7 +100,7 @@ CHANNEL_LAYERS = {
 }
 
 DJANGO_ALLOW_ASYNC_UNSAFE = True
-ASGI_APPLICATION = 'graphql_ws.django.routing.application'
+ASGI_APPLICATION = 'api_config.routing.application'
 WSGI_APPLICATION = 'api_config.wsgi.application'
 
 
@@ -114,7 +113,7 @@ DATABASES = {
         'NAME': env.str('DATABASE_NAME'),
         'USER': env.str('DATABASE_USER'),
         'PASSWORD': env.str('DATABASE_PASSWORD'),
-        'HOST': env.str('DATABASE_HOST'),
+        'HOST': env.str('DATABASE_HOST', '127.0.0.1'),
         'PORT': env.str('DATABASE_PORT'),
     }
 }
